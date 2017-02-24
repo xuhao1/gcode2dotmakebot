@@ -9,3 +9,7 @@ So, please try and improve it with your brave heart.
 
 # Acknowledgement
 Acknowledge GCoder via Printrun.
+
+# Usage
+
+./convert.py path-to-your/tool-path.gcode
