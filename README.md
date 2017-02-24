@@ -5,4 +5,4 @@ So that you can use CURA to slice your 3d model for Makerbot 5th and Makerbot Z1
 
 This program can work on Z18 but author don't ensure if the program could DAMAGE or BOOM your printer.
 
-So, please try and improve it with your brave.
+So, please try and improve it with your brave heart.
