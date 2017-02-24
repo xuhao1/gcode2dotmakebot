@@ -11,5 +11,6 @@ So, please try and improve it with your brave heart.
 Acknowledge GCoder via Printrun.
 
 # Usage
-
+```bash
 ./convert.py path-to-your/tool-path.gcode
+```
