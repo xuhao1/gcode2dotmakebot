@@ -6,6 +6,7 @@ import os
 import json
 import shutil
 from subprocess import call
+import matplotlib.pyplot as plt
 
 def zipdir(path, ziph):
     # ziph is zipfile handle
@@ -59,7 +60,19 @@ class Dotmakerbot:
         self.jsontoolpath = []
         self.fan = 0.5
 
+        self.x_offset = 0
+        self.y_offset = 0
+        self.z_offset = 0
+        self.a_offset = 0
+
         self.temp = 230
+
+        self.x_array = []
+        self.y_array = []
+        self.z_array = []
+        self.a_array = []
+        self.feedrate_array = []
+
         self.preprocesser()
         self.init_meta()
 
@@ -123,19 +136,34 @@ class Dotmakerbot:
         for line in self.gcode.lines:
             if line.command:
                 if line.is_move:
-                    if line.x != None:
-                        x = line.x
-                    if line.y != None:
-                        y = line.y
-                    if line.z != None:
-                        z = line.z
-                    if line.e != None:
-                        e = line.e
-                    if line.f != None:
+                    if line.x is not None:
+                        x = line.x + self.x_offset
+                    if line.y is not None:
+                        y = line.y + self.y_offset
+                    if line.z is not None:
+                        z = line.z + self.z_offset
+                    if line.e is not None:
+                        e = line.e + self.a_offset
+                    if line.f is not None:
                         f = line.f
+
                     cmds.append(gen_move(x, y, z, e, f/60))
+                    self.x_array.append(x)
+                    self.y_array.append(y)
+                    self.z_array.append(z)
+                    self.a_array.append(e)
+                    self.feedrate_array.append(f)
                 else:
-                    #print line.command
+                    if line.command == "G92":
+                        if line.x is not None:
+                            self.x_offset = line.x[len(self.x_array) - 1] - line.x
+                        if line.y is not None:
+                            self.y_offset = line.y[len(self.y_array) - 1] - line.y
+                        if line.z is not None:
+                            self.z_offset = line.z[len(self.z_array) - 1] - line.z
+                        if line.e is not None:
+                            self.a_offset = self.a_array[len(self.a_array)-1] - line.e
+                            #print line.raw
                     pass
         cmds.append(gen_toggle_fan(False))
         # print self.cmds
